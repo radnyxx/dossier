@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>search | your name</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script src="/assets/theme.js"></script>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <nav class="nav">
+        <a href="/">home</a>
+        <a href="/art.html">art</a>
+        <a href="/stuff.html">projects</a>
+        <a href="/blog/index.html">blog</a>
+        <a href="/search.html" class="current">/search</a>
+      </nav>
+      <button class="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+        </svg>
+      </button>
+    </div>
+
+    <h1>search</h1>
+    <input id="search-input" type="text" placeholder="search pages and posts..." autocomplete="off" />
+    <div id="search-results"></div>
+
+    <footer class="site-footer">
+      made with ❤️ — built with plain html, css &amp; js
+    </footer>
+
+  </div>
+
+  <script>
+    (function () {
+      var input = document.getElementById("search-input");
+      var results = document.getElementById("search-results");
+      var index = [];
+
+      fetch("/assets/search-index.json")
+        .then(function (res) { return res.json(); })
+        .then(function (data) { index = data; })
+        .catch(function () {
+          results.innerHTML = '<p class="no-results">could not load search index.</p>';
+        });
+
+      function render(items) {
+        if (!items.length) {
+          results.innerHTML = '<p class="no-results">no results.</p>';
+          return;
+        }
+        results.innerHTML = items
+          .map(function (item) {
+            return (
+              '<div class="list-item">' +
+              '<a href="' + item.url + '">' + item.title + "</a>" +
+              '<div class="desc">' + item.excerpt + "</div>" +
+              "</div>"
+            );
+          })
+          .join("");
+      }
+
+      input.addEventListener("input", function () {
+        var q = input.value.trim().toLowerCase();
+        if (!q) {
+          results.innerHTML = "";
+          return;
+        }
+        var matches = index.filter(function (item) {
+          return (
+            item.title.toLowerCase().indexOf(q) !== -1 ||
+            item.excerpt.toLowerCase().indexOf(q) !== -1
+          );
+        });
+        render(matches);
+      });
+    })();
+  </script>
+
+</body>
+</html>
