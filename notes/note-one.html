@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     1. CHANGE THE TITLE BELOW
+     ============================================================ -->
+<title>zig learnings | yourname</title>
+<meta name="description" content="a running note">
+
+<link rel="stylesheet" href="../style.css">
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+</head>
+<body class="layout">
+
+  <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="toggle sidebar" aria-expanded="false">≡</button>
+
+  <!-- ============================================================
+       2. SIDEBAR — identical on every page, copy-pasted.
+       Add a new <li><a href="...">...</a></li> line here
+       the moment you create a new post, in whichever
+       category it belongs to. Nothing else needs to change.
+       ============================================================ -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="tree">
+      <details open>
+        <summary>blog</summary>
+        <div class="tree-children">
+          <details>
+            <summary>devlogs</summary>
+            <ul>
+              <li><a href="../blog/devlogs/post-one.html">devlog title one</a></li>
+            </ul>
+          </details>
+          <details>
+            <summary>talks</summary>
+            <ul>
+              <li><a href="../blog/talks/post-one.html">talk title one</a></li>
+            </ul>
+          </details>
+          <details>
+            <summary>tutorial</summary>
+            <ul>
+              <li><a href="../blog/tutorial/post-one.html">tutorial title one</a></li>
+            </ul>
+          </details>
+        </div>
+      </details>
+
+      <details open>
+        <summary>journal</summary>
+        <ul>
+          <li><a href="entry-one.html">24/10 - entry one</a></li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>notes</summary>
+        <ul>
+          <li><a href="../notes/note-one.html">note title one</a></li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>poems</summary>
+        <ul>
+          <li><a href="../poems/poem-one.html">poem one</a></li>
+        </ul>
+      </details>
+    </nav>
+  </aside>
+
+  <main class="content">
+  <div class="wrap wrap--post">
+
+    <header class="site-header">
+      <a href="../" class="brand">
+        <img src="https://github.com/yourhandle.png" alt="" class="avatar">
+        <span>yourname</span>
+      </a>
+      <nav class="topnav">
+        <a href="../art.html">art</a>
+        <a href="../projects.html">projects</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="toggle dark mode">○</button>
+        <a href="../search.html" class="icon-link" aria-label="search">⌕</a>
+      </nav>
+    </header>
+
+    <!-- ============================================================
+         3. POST CONTENT — everything below is yours to edit.
+         post-title / post-meta / post-body are the only
+         classes you need; write plain HTML inside post-body
+         (paragraphs, headings, code blocks, images, lists).
+         ============================================================ -->
+    <article class="post">
+      <p class="back-link"><a href="../">← back home</a></p>
+
+      <h1 class="post-title">zig learnings</h1>
+      <p class="post-meta">notes <span class="muted">·</span> updated as i go</p>
+
+      <div class="post-body">
+
+        <p>a running scratchpad — not a polished post, just things i
+          want to remember.</p>
+
+        <ul>
+          <li><code>defer</code> runs in reverse order of declaration,
+            same as most languages with the concept.</li>
+          <li>comptime is genuinely just running zig at compile time —
+            no separate macro language to learn.</li>
+          <li>allocator interfaces are passed explicitly everywhere,
+            which feels verbose at first and then feels obvious.</li>
+        </ul>
+
+        <p>will keep adding to this as i learn more.</p>
+
+      </div>
+    </article>
+
+  </div>
+  </main>
+
+<script>
+  (function () {
+    var themeBtn = document.getElementById("theme-toggle");
+    var root = document.documentElement;
+
+    function paintThemeBtn() {
+      var isDark = root.getAttribute("data-theme") === "dark";
+      themeBtn.textContent = isDark ? "●" : "○";
+    }
+
+    paintThemeBtn();
+
+    themeBtn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      paintThemeBtn();
+    });
+
+    var sidebarBtn = document.getElementById("sidebar-toggle");
+    var sidebar = document.getElementById("sidebar");
+
+    sidebarBtn.addEventListener("click", function () {
+      var isOpen = sidebar.classList.toggle("is-open");
+      sidebarBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  })();
+</script>
+</body>
+</html>
