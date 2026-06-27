@@ -127,8 +127,64 @@ hr {
 }
 
 /* ---------------------------------------------------------
-   header
+   quick links (top of page)
    --------------------------------------------------------- */
+.quicklinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  margin-bottom: 1.8em;
+  font-size: 0.95em;
+}
+
+/* ---------------------------------------------------------
+   site index — nested sitemap, rendered like markdown bullets
+   --------------------------------------------------------- */
+.site-index {
+  margin-bottom: 0.5rem;
+}
+
+.site-index ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-index > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.site-index > ul > li {
+  font-weight: 600;
+}
+
+.site-index li {
+  line-height: 1.6;
+}
+
+.site-index li::before {
+  content: "- ";
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.site-index > ul > li::before {
+  content: none;
+}
+
+.site-index ul ul {
+  margin: 0.5em 0 0.7em 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  font-weight: 400;
+}
+
+.site-index ul ul ul {
+  margin-left: 1.4em;
+}
 .site-header {
   display: flex;
   align-items: center;
