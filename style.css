@@ -107,9 +107,8 @@ a {
 
 a:hover,
 a:focus-visible {
-  background: var(--link-hover-bg);
-  color: var(--link-hover-fg);
-  text-decoration: none;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
 }
 
 a:focus-visible {
@@ -188,12 +187,14 @@ a:focus-visible {
 }
 
 .tree summary:hover {
-  background: var(--link-hover-bg);
-  color: var(--link-hover-fg);
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
 }
 
 .tree summary:hover::before {
-  color: var(--link-hover-fg);
+  color: var(--fg);
 }
 
 .tree ul {
@@ -480,6 +481,111 @@ section h2 {
 }
 
 /* ---------------------------------------------------------
+   post pages (blog / journal / notes / poems)
+   --------------------------------------------------------- */
+.wrap--post {
+  max-width: 620px;
+}
+
+.back-link {
+  margin-bottom: 2rem;
+  font-size: 0.9em;
+}
+
+.post-title {
+  font-size: 1.5em;
+  margin-bottom: 0.4em;
+  line-height: 1.3;
+}
+
+.post-meta {
+  color: var(--muted);
+  font-size: 0.85em;
+  margin-bottom: 2.5em;
+}
+
+.post-body {
+  font-size: 1em;
+}
+
+.post-body > * {
+  margin-bottom: 1.3em;
+}
+
+.post-body > *:last-child {
+  margin-bottom: 0;
+}
+
+.post-body h2 {
+  font-size: 1.1em;
+  margin-top: 0.4em;
+}
+
+.post-body h3 {
+  font-size: 1em;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.4em;
+}
+
+.post-body ul {
+  list-style: disc;
+}
+
+.post-body ol {
+  list-style: decimal;
+}
+
+.post-body li {
+  margin-bottom: 0.5em;
+  line-height: 1.65;
+}
+
+.post-body li:last-child {
+  margin-bottom: 0;
+}
+
+.post-body code {
+  font-family: var(--font-mono);
+  background: var(--bg-sidebar);
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+  border: 1px solid var(--rule);
+}
+
+.post-body pre {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--rule);
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  font-size: 0.88em;
+  line-height: 1.6;
+}
+
+.post-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.post-body blockquote {
+  margin: 0;
+  padding-left: 1.1em;
+  border-left: 2px solid var(--rule);
+  color: var(--muted);
+}
+
+.post-body blockquote p {
+  margin-bottom: 0;
+}
+
+.post-body img {
+  border: 1px solid var(--rule);
+}
+
+/* ---------------------------------------------------------
    footer
    --------------------------------------------------------- */
 .site-footer {
@@ -497,7 +603,8 @@ section h2 {
 }
 
 .site-footer a:hover {
-  color: var(--link-hover-fg);
+  color: var(--fg);
+  text-decoration-color: currentColor;
 }
 
 /* ---------------------------------------------------------
