@@ -15,232 +15,244 @@
   })();
 </script>
 </head>
-<body>
+<body class="layout">
 
-<div class="wrap">
+  <!-- ============ SIDEBAR (persistent, collapsible sections) ============ -->
+  <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="toggle sidebar" aria-expanded="false">≡</button>
 
-  <!-- ============ TOP-LEVEL QUICK LINKS ============ -->
-  <p class="quicklinks">
-    <a href="/art.html">art</a>
-    <a href="/projects.html">projects</a>
-    <a href="/search.html">/search</a>
-  </p>
-
-  <!-- ============ SITE INDEX (nested sitemap) ============ -->
-  <nav class="site-index">
-    <ul>
-      <li>
-        blog
-        <ul>
-          <li>
-            devlogs
+  <aside class="sidebar" id="sidebar">
+    <nav class="tree">
+      <details open>
+        <summary>blog</summary>
+        <div class="tree-children">
+          <details>
+            <summary>devlogs</summary>
             <ul>
               <li><a href="/blog/devlogs/post-one.html">devlog title one</a></li>
               <li><a href="/blog/devlogs/post-two.html">devlog title two</a></li>
               <li><a href="/blog/devlogs/post-three.html">devlog title three</a></li>
               <li><a href="/blog/devlogs/post-four.html">devlog title four</a></li>
             </ul>
-          </li>
-          <li>
-            talks
+          </details>
+          <details>
+            <summary>talks</summary>
             <ul>
               <li><a href="/blog/talks/post-one.html">talk title one</a></li>
               <li><a href="/blog/talks/post-two.html">talk title two</a></li>
               <li><a href="/blog/talks/post-three.html">talk title three</a></li>
               <li><a href="/blog/talks/post-four.html">talk title four</a></li>
             </ul>
-          </li>
-          <li>
-            tutorial
+          </details>
+          <details>
+            <summary>tutorial</summary>
             <ul>
               <li><a href="/blog/tutorial/post-one.html">tutorial title one</a></li>
               <li><a href="/blog/tutorial/post-two.html">tutorial title two</a></li>
               <li><a href="/blog/tutorial/post-three.html">tutorial title three</a></li>
             </ul>
-          </li>
-          <li><a href="/blog/standalone-post-one.html">standalone post one</a></li>
-          <li><a href="/blog/standalone-post-two.html">standalone post two</a></li>
-        </ul>
-      </li>
+          </details>
+          <ul class="tree-flat">
+            <li><a href="/blog/standalone-post-one.html">standalone post one</a></li>
+            <li><a href="/blog/standalone-post-two.html">standalone post two</a></li>
+          </ul>
+        </div>
+      </details>
 
-      <li>
-        journal
+      <details open>
+        <summary>journal</summary>
         <ul>
-          <li><a href="/journal/entry-one.html">entry one — short title</a></li>
-          <li><a href="/journal/entry-two.html">entry two — short title</a></li>
-          <li><a href="/journal/entry-three.html">entry three — short title</a></li>
+          <li><a href="/journal/entry-one.html">24/10 - entry one</a></li>
+          <li><a href="/journal/entry-two.html">25/04 - entry two</a></li>
+          <li><a href="/journal/entry-three.html">26/05 - entry three</a></li>
         </ul>
-      </li>
+      </details>
 
-      <li>
-        notes
+      <details>
+        <summary>notes</summary>
         <ul>
           <li><a href="/notes/note-one.html">note title one</a></li>
         </ul>
-      </li>
+      </details>
 
-      <li>
-        poems
+      <details>
+        <summary>poems</summary>
         <ul>
-          <li><a href="/poems/poem-one.html">poem title one</a></li>
-          <li><a href="/poems/poem-two.html">poem title two</a></li>
-          <li><a href="/poems/poem-three.html">poem title three</a></li>
-          <li><a href="/poems/poem-four.html">poem title four</a></li>
+          <li><a href="/poems/poem-one.html">poem one</a></li>
+          <li><a href="/poems/poem-two.html">poem two</a></li>
+          <li><a href="/poems/poem-three.html">poem three</a></li>
+          <li><a href="/poems/poem-four.html">poem four</a></li>
+          <li><a href="/poems/poem-five.html">poem five</a></li>
+          <li><a href="/poems/poem-six.html">poem six</a></li>
         </ul>
-      </li>
-    </ul>
-  </nav>
-
-  <hr>
-
-  <!-- ============ HEADER ============ -->
-  <header class="site-header">
-    <a href="/" class="brand">
-      <img src="https://github.com/yourhandle.png" alt="" class="avatar">
-      <span>yourname</span>
-    </a>
-    <nav class="topnav">
-      <a href="/art.html">art</a>
-      <a href="/projects.html">projects</a>
-      <a href="/search.html">/search</a>
-      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="toggle dark mode">○ theme</button>
+      </details>
     </nav>
-  </header>
+  </aside>
 
-  <hr>
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="content">
+  <div class="wrap">
 
-  <!-- ============ INTRO ============ -->
-  <section class="intro">
-    <p>hey there <span aria-hidden="true">👋</span> ! i like nixos, neovim and minimalism.</p>
+    <!-- ============ HEADER ============ -->
+    <header class="site-header">
+      <a href="/" class="brand">
+        <img src="https://github.com/yourhandle.png" alt="" class="avatar">
+        <span>yourname</span>
+      </a>
+      <nav class="topnav">
+        <a href="/art.html">art</a>
+        <a href="/projects.html">projects</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="toggle dark mode">○</button>
+        <a href="/search.html" class="icon-link" aria-label="search">⌕</a>
+      </nav>
+    </header>
 
-    <p>i live in the cli, probably programming. i code mostly for the web but
-      transitioning more towards zig and gamedev.</p>
+    <!-- ============ INTRO ============ -->
+    <section class="intro">
+      <p>hey there <span aria-hidden="true">👋</span> ! i like nixos, neovim and minimalism.</p>
 
-    <p>hacking around at <a href="#">flora</a>, open to
-      new roles, mail at <a href="#">name@example.com</a></p>
+      <p>i live in the cli, probably programming. i code mostly for the web but
+        transitioning more towards zig and gamedev.</p>
 
-    <p class="link-row">
-      <a href="/resume.pdf">resume</a>
-      <a href="https://github.com/yourhandle">github</a>
-      <a href="https://x.com/yourhandle">x dot com</a>
-    </p>
-  </section>
+      <p>hacking around at <a href="#">flora</a>, open to
+        new roles, mail at <a href="#">name@example.com</a></p>
 
-  <!-- optional hero image, remove if not needed -->
-  <a href="#" class="hero-image-link">
-    <img src="placeholder-hero.png" alt="" class="hero-image">
-  </a>
+      <p class="link-row">
+        <a href="/resume.pdf">resume</a>
+        <a href="https://github.com/yourhandle">github</a>
+        <a href="https://x.com/yourhandle">x dot com</a>
+      </p>
+    </section>
 
-  <hr>
+    <!-- optional hero image, remove if not needed -->
+    <a href="#" class="hero-image-link">
+      <img src="placeholder-hero.png" alt="" class="hero-image">
+    </a>
 
-  <!-- ============ PROJECTS ============ -->
-  <section class="projects">
-    <h2>some projects</h2>
+    <!-- ============ PROJECTS ============ -->
+    <section class="projects">
+      <h2>some projects</h2>
 
-    <ul class="project-list">
-      <li>
-        <a href="#"><strong>project one</strong></a>
-        <span class="tag">(unfinished)</span>
-        — card game inspired by club penguin jutsu in zig
-      </li>
+      <div class="project-grid">
+        <a href="#" class="project-card">
+          <img src="placeholder-project-1.png" alt="">
+          <div class="project-card-body">
+            <p class="project-card-title">project one</p>
+            <p class="project-card-desc"><span class="tag">(unfinished)</span> card game inspired by club penguin jutsu in zig</p>
+          </div>
+        </a>
 
-      <li>
-        <a href="#"><strong>project two</strong></a>
-        — infant indie game dev studio, creating games with löve.
-      </li>
+        <a href="#" class="project-card">
+          <img src="placeholder-project-2.png" alt="">
+          <div class="project-card-body">
+            <p class="project-card-title">project two</p>
+            <p class="project-card-desc">infant indie game dev studio, creating games with löve.</p>
+          </div>
+        </a>
+      </div>
 
-      <li>
-        <a href="#">project three</a> -
-        starter kit for making your own cryptic hunts in golang
-      </li>
+      <ul class="project-list">
+        <li>
+          <a href="#">project three</a> -
+          starter kit for making your own cryptic hunts in golang
+        </li>
 
-      <li>
-        <a href="#">project four</a> -
-        wasm lightroom-esque editor in rust and nextjs
-      </li>
+        <li>
+          <a href="#">project four</a> -
+          wasm lightroom-esque editor in rust and nextjs
+        </li>
 
-      <li>
-        <a href="#">project five</a> -
-        basic ui library for widgets in löve2d
-      </li>
+        <li>
+          <a href="#">project five</a> -
+          basic ui library for widgets in löve2d
+        </li>
 
-      <li>
-        <a href="#">project six</a> -
-        semi-realistic planet simulator in odin
-      </li>
-    </ul>
+        <li>
+          <a href="#">project six</a> -
+          semi-realistic planet simulator in odin
+        </li>
+      </ul>
 
-    <p>you can check out all of them <a href="/projects.html">here</a></p>
-  </section>
+      <p>you can check out all of them <a href="/projects.html">here</a></p>
+    </section>
 
-  <hr>
+    <hr>
 
-  <!-- ============ MORE LINKS ============ -->
-  <section class="more-links">
-    <h2>some more links</h2>
-    <p><a href="/media.html">all the stuff that i consoom</a></p>
-  </section>
+    <!-- ============ MORE LINKS ============ -->
+    <section class="more-links">
+      <h2>some more links</h2>
+      <p><a href="/media.html">all the stuff that i consoom</a></p>
+    </section>
 
-  <!-- ============ COOL PEOPLE ============ -->
-  <section class="cool-people">
-    <h2>cool people</h2>
-    <p>here are some of my cool friends, do checkout their stuff</p>
+    <!-- ============ COOL PEOPLE ============ -->
+    <section class="cool-people">
+      <h2>cool people</h2>
+      <p>here are some of my cool friends, do checkout their stuff</p>
 
-    <p class="avatar-row">
-      <a href="#"><img src="https://github.com/friend1.png" alt="friend1"></a>
-      <a href="#"><img src="https://github.com/friend2.png" alt="friend2"></a>
-      <a href="#"><img src="https://github.com/friend3.png" alt="friend3"></a>
-      <a href="#"><img src="https://github.com/friend4.png" alt="friend4"></a>
-      <a href="#"><img src="https://github.com/friend5.png" alt="friend5"></a>
-      <a href="#"><img src="https://github.com/friend6.png" alt="friend6"></a>
-    </p>
-  </section>
+      <p class="avatar-row">
+        <a href="#"><img src="https://github.com/friend1.png" alt="friend1"></a>
+        <a href="#"><img src="https://github.com/friend2.png" alt="friend2"></a>
+        <a href="#"><img src="https://github.com/friend3.png" alt="friend3"></a>
+        <a href="#"><img src="https://github.com/friend4.png" alt="friend4"></a>
+        <a href="#"><img src="https://github.com/friend5.png" alt="friend5"></a>
+        <a href="#"><img src="https://github.com/friend6.png" alt="friend6"></a>
+      </p>
+    </section>
 
-  <!-- ============ WEBRINGS ============ -->
-  <section class="webrings">
-    <p class="webring-line">
-      <span class="muted">uni webring:</span>
-      <a href="#">your.webring</a>
-      <a href="#">prev</a>
-      <a href="#">roll</a>
-      <a href="#">next</a>
-    </p>
+    <!-- ============ WEBRINGS ============ -->
+    <section class="webrings">
+      <p class="webring-line">
+        <span class="muted">uni webring:</span>
+        <a href="#">your.webring</a>
+        <a href="#">prev</a>
+        <a href="#">roll</a>
+        <a href="#">next</a>
+      </p>
 
-    <p class="webring-line">
-      <span class="muted">threadlocked:</span>
-      <a href="#">prev</a>
-      <a href="#">ring</a>
-      <a href="#">next</a>
-    </p>
-  </section>
+      <p class="webring-line">
+        <span class="muted">threadlocked:</span>
+        <a href="#">prev</a>
+        <a href="#">ring</a>
+        <a href="#">next</a>
+      </p>
+    </section>
 
-  <hr>
+    <hr>
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="site-footer">
-    <p>made out of ❤️ and boredom</p>
-    <p>built with <a href="#">your framework</a></p>
-  </footer>
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+      <p>made out of ❤️ and boredom</p>
+      <p>built with <a href="#">your framework</a></p>
+    </footer>
 
-</div>
+  </div>
+  </main>
 
 <script>
   (function () {
-    var btn = document.getElementById("theme-toggle");
+    var themeBtn = document.getElementById("theme-toggle");
     var root = document.documentElement;
 
-    function label() {
+    function paintThemeBtn() {
       var isDark = root.getAttribute("data-theme") === "dark";
-      btn.textContent = isDark ? "● theme" : "○ theme";
+      themeBtn.textContent = isDark ? "●" : "○";
     }
 
-    label();
+    paintThemeBtn();
 
-    btn.addEventListener("click", function () {
+    themeBtn.addEventListener("click", function () {
       var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       localStorage.setItem("theme", next);
-      label();
+      paintThemeBtn();
+    });
+
+    /* mobile sidebar toggle */
+    var sidebarBtn = document.getElementById("sidebar-toggle");
+    var sidebar = document.getElementById("sidebar");
+
+    sidebarBtn.addEventListener("click", function () {
+      var isOpen = sidebar.classList.toggle("is-open");
+      sidebarBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
   })();
 </script>

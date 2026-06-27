@@ -1,6 +1,7 @@
 /* =========================================================
    namishh.com-style portfolio template
    hyper-minimal, text-first, "beautiful markdown" aesthetic
+   two-column layout: persistent collapsible sidebar + content
    ========================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
@@ -8,14 +9,16 @@
 :root {
   /* ---- light theme (default) ---- */
   --bg:        #fbf1c7;   /* muted cream background */
+  --bg-sidebar:#f3e8c2;   /* very slightly deeper than main bg */
   --fg:        #282828;   /* dark charcoal text */
   --muted:     #7c6f64;   /* secondary / parenthetical text */
-  --link:      #282828;   /* links inherit fg, underlined */
+  --link:      #282828;
   --link-hover-bg: #282828;
   --link-hover-fg: #fbf1c7;
   --rule:      #d5c9a1;   /* hairline rule color */
   --avatar-border: transparent;
 
+  --sidebar-width: 230px;
   --max-width: 680px;
 
   /* ---- type ---- */
@@ -27,18 +30,19 @@
 /* ---- dark theme ---- */
 [data-theme="dark"] {
   --bg:        #1d1f21;   /* charcoal black background */
+  --bg-sidebar:#161718;   /* slightly deeper than main bg */
   --fg:        #ebdbb2;   /* warm off-white text */
-  --muted:     #928374;   /* secondary / parenthetical text */
+  --muted:     #928374;
   --link:      #ebdbb2;
   --link-hover-bg: #ebdbb2;
   --link-hover-fg: #1d1f21;
-  --rule:      #3c3836;   /* hairline rule color */
+  --rule:      #3c3836;
   --avatar-border: #3c3836;
 }
 
-/* prevent any transition flash when the theme attribute changes */
 html {
   background: var(--bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ---------------------------------------------------------
@@ -46,10 +50,6 @@ html {
    --------------------------------------------------------- */
 * {
   box-sizing: border-box;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -88,6 +88,12 @@ p:last-child {
   margin-bottom: 0;
 }
 
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2.5rem 0;
+}
+
 /* ---------------------------------------------------------
    links — instant, no-animation hover per brief
    --------------------------------------------------------- */
@@ -112,86 +118,129 @@ a:focus-visible {
 }
 
 /* ---------------------------------------------------------
-   layout shell
+   page layout: sidebar + content, two columns
    --------------------------------------------------------- */
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid var(--rule);
+  background: var(--bg-sidebar);
+  padding: 2.5rem 1.5rem;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  font-size: 0.92em;
+}
+
+.content {
+  min-width: 0;
+}
+
 .wrap {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 4.5rem 1.5rem 5rem;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid var(--rule);
-  margin: 2.5rem 0;
+  padding: 3.5rem 1.5rem 5rem;
 }
 
 /* ---------------------------------------------------------
-   quick links (top of page)
+   sidebar tree (native details/summary, no JS needed)
    --------------------------------------------------------- */
-.quicklinks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.1rem;
-  margin-bottom: 1.8em;
-  font-size: 0.95em;
-}
-
-/* ---------------------------------------------------------
-   site index — nested sitemap, rendered like markdown bullets
-   --------------------------------------------------------- */
-.site-index {
-  margin-bottom: 0.5rem;
-}
-
-.site-index ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.site-index > ul {
+.tree {
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
+  gap: 1.1em;
 }
 
-.site-index > ul > li {
+.tree details {
+  display: block;
+}
+
+.tree summary {
+  cursor: pointer;
   font-weight: 600;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.1em 0;
+  user-select: none;
 }
 
-.site-index li {
-  line-height: 1.6;
+.tree summary::-webkit-details-marker {
+  display: none;
 }
 
-.site-index li::before {
-  content: "- ";
-  color: var(--muted);
+.tree summary::before {
+  content: "›";
+  display: inline-block;
   font-weight: 400;
+  color: var(--muted);
+  width: 0.8em;
 }
 
-.site-index > ul > li::before {
-  content: none;
+.tree details[open] > summary::before {
+  content: "⌄";
 }
 
-.site-index ul ul {
-  margin: 0.5em 0 0.7em 1.4em;
+.tree summary:hover {
+  background: var(--link-hover-bg);
+  color: var(--link-hover-fg);
+}
+
+.tree summary:hover::before {
+  color: var(--link-hover-fg);
+}
+
+.tree ul {
   display: flex;
   flex-direction: column;
-  gap: 0.35em;
-  font-weight: 400;
+  gap: 0.55em;
+  margin: 0.7em 0 0 1.3em;
 }
 
-.site-index ul ul ul {
-  margin-left: 1.4em;
+.tree-children {
+  margin-left: 1.3em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  margin-top: 0.6em;
 }
+
+.tree-children > details > ul {
+  margin-left: 1.3em;
+}
+
+.tree-flat {
+  margin: 0 0 0 0 !important;
+}
+
+.tree a {
+  display: inline-block;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------
+   mobile sidebar toggle (hidden on desktop)
+   --------------------------------------------------------- */
+.sidebar-toggle {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   header
+   --------------------------------------------------------- */
 .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2.2rem;
 }
 
 .brand {
@@ -212,13 +261,22 @@ hr {
   height: 28px;
   border-radius: 50%;
   border: 1px solid var(--avatar-border);
+  object-fit: cover;
 }
 
 .topnav {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.35rem 1rem;
   font-size: 0.95em;
+}
+
+.icon-link {
+  text-decoration: none;
+  font-size: 1.05em;
+  line-height: 1;
+  padding: 0.1em 0.2em;
 }
 
 .muted {
@@ -235,11 +293,15 @@ hr {
   background: transparent;
   color: var(--fg);
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: 0.9em;
   line-height: 1;
-  padding: 0.35em 0.6em;
+  width: 1.9em;
+  height: 1.9em;
   cursor: pointer;
-  border-radius: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover,
@@ -295,8 +357,58 @@ section h2 {
   font-weight: 600;
 }
 
+.projects {
+  margin: 2.5rem 0;
+}
+
 /* ---------------------------------------------------------
-   projects
+   project cards (image + title + desc)
+   --------------------------------------------------------- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.6em;
+}
+
+.project-card {
+  display: block;
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.project-card:hover {
+  background: none;
+  color: var(--fg);
+  border-color: var(--fg);
+}
+
+.project-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-bottom: 1px solid var(--rule);
+}
+
+.project-card-body {
+  padding: 0.85em 1em;
+}
+
+.project-card-title {
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+
+.project-card-desc {
+  font-size: 0.9em;
+  color: var(--muted);
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------
+   plain project list (text-only entries below cards)
    --------------------------------------------------------- */
 .project-list {
   display: flex;
@@ -309,14 +421,10 @@ section h2 {
   line-height: 1.65;
 }
 
-.project-list strong {
-  font-weight: 600;
-}
-
 .tag {
   color: var(--muted);
   font-size: 0.9em;
-  margin-left: 0.15em;
+  margin-right: 0.3em;
 }
 
 /* ---------------------------------------------------------
@@ -395,14 +503,69 @@ section h2 {
 /* ---------------------------------------------------------
    responsive
    --------------------------------------------------------- */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 20;
+    width: 2.2em;
+    height: 2.2em;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--link-hover-bg);
+    color: var(--link-hover-fg);
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: min(80vw, 280px);
+    transform: translateX(-100%);
+    z-index: 15;
+    padding-top: 4.5rem;
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .wrap {
+    padding-top: 4.5rem;
+  }
+}
+
 @media (max-width: 480px) {
   .wrap {
-    padding: 3rem 1.25rem 4rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-bottom: 4rem;
   }
 
   .site-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
   }
 
   body {
