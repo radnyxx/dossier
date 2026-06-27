@@ -1,2 +1,0 @@
-# dossier
-git-hired .

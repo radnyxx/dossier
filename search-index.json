@@ -1,8 +1,0 @@
-[
-  { "title": "home", "url": "/", "excerpt": "profile, skills, education, projects, what i like" },
-  { "title": "projects", "url": "/stuff.html", "excerpt": "full list of projects" },
-  { "title": "art", "url": "/art.html", "excerpt": "gallery of art and photos" },
-  { "title": "blog", "url": "/blog/index.html", "excerpt": "list of posts" },
-  { "title": "Placeholder Post Title One", "url": "/blog/post-one.html", "excerpt": "placeholder content for your first post" },
-  { "title": "Placeholder Post Title Two", "url": "/blog/post-two.html", "excerpt": "second placeholder post" }
-]
