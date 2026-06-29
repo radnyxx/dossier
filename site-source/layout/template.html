@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} | yourname</title>
+<meta name="description" content="{{DESCRIPTION}}">
+<link rel="stylesheet" href="{{ASSET_PREFIX}}style.css">
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+</head>
+<body class="layout">
+
+  <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="toggle sidebar" aria-expanded="false">≡</button>
+
+  <aside class="sidebar" id="sidebar">
+    <nav class="tree">
+{{SIDEBAR}}
+    </nav>
+  </aside>
+
+  <main class="content">
+  <div class="wrap{{WRAP_MODIFIER}}">
+
+    <header class="site-header">
+      <a href="{{ASSET_PREFIX}}index.html" class="brand">
+        <img src="https://github.com/yourhandle.png" alt="" class="avatar">
+        <span>yourname</span>
+      </a>
+      <nav class="topnav">
+        <a href="{{ASSET_PREFIX}}art.html">art</a>
+        <a href="{{ASSET_PREFIX}}projects.html">projects</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="toggle dark mode">○</button>
+        <a href="{{ASSET_PREFIX}}search.html" class="icon-link" aria-label="search">⌕</a>
+      </nav>
+    </header>
+
+{{BODY}}
+
+  </div>
+  </main>
+
+<script>
+  (function () {
+    var themeBtn = document.getElementById("theme-toggle");
+    var root = document.documentElement;
+
+    function paintThemeBtn() {
+      var isDark = root.getAttribute("data-theme") === "dark";
+      themeBtn.textContent = isDark ? "●" : "○";
+    }
+
+    paintThemeBtn();
+
+    themeBtn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      paintThemeBtn();
+    });
+
+    var sidebarBtn = document.getElementById("sidebar-toggle");
+    var sidebar = document.getElementById("sidebar");
+
+    sidebarBtn.addEventListener("click", function () {
+      var isOpen = sidebar.classList.toggle("is-open");
+      sidebarBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  })();
+</script>
+</body>
+</html>

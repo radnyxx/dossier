@@ -1,15 +1,9 @@
-/* =========================================================
-   namishh.com-style portfolio template
-   hyper-minimal, text-first, "beautiful markdown" aesthetic
-   two-column layout: persistent collapsible sidebar + content
-   ========================================================= */
-
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
   /* ---- light theme (default) ---- */
-  --bg:        #fbf1c7;   /* muted cream background */
-  --bg-sidebar:#f3e8c2;   /* very slightly deeper than main bg */
+  --bg:        #F9F6F0;   /* muted cream background */
+  --bg-sidebar:#F4F1EA2;   /* very slightly deeper than main bg */
   --fg:        #282828;   /* dark charcoal text */
   --muted:     #7c6f64;   /* secondary / parenthetical text */
   --link:      #282828;
