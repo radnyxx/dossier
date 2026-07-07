@@ -28,6 +28,9 @@ jobs:
       - name: run build
         run: node build.js
 
+      - name: verify dist contents
+        run: find dist -type f | sort
+
       - name: upload build output
         uses: actions/upload-pages-artifact@v3
         with:
