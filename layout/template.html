@@ -9,67 +9,59 @@
 <script>
   (function () {
     var stored = localStorage.getItem("theme");
-    var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var theme = stored || "dark";
     document.documentElement.setAttribute("data-theme", theme);
   })();
 </script>
 </head>
-<body class="layout">
+<body>
 
-  <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="toggle sidebar" aria-expanded="false">≡</button>
+<div class="page">
 
-  <aside class="sidebar" id="sidebar">
-    <nav class="tree">
-{{SIDEBAR}}
-    </nav>
-  </aside>
+  <header class="site-header">
+    <a href="{{ASSET_PREFIX}}index.html" class="brand">yourname</a>
+    <div class="header-icons">
+      <a href="https://github.com/yourhandle" title="github">gh</a>
+      <a href="https://x.com/yourhandle" title="x / twitter">x</a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="toggle theme">○</button>
+    </div>
+  </header>
 
-  <main class="content">
-  <div class="wrap{{WRAP_MODIFIER}}">
-
-    <header class="site-header">
-      <a href="{{ASSET_PREFIX}}index.html" class="brand">
-        <img src="https://github.com/yourhandle.png" alt="" class="avatar">
-        <span>yourname</span>
-      </a>
-      <nav class="topnav">
-        <a href="{{ASSET_PREFIX}}art.html">art</a>
-        <a href="{{ASSET_PREFIX}}projects.html">projects</a>
-        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="toggle dark mode">○</button>
-        <a href="{{ASSET_PREFIX}}search.html" class="icon-link" aria-label="search">⌕</a>
-      </nav>
-    </header>
+  <nav class="topnav">
+    <a href="{{ASSET_PREFIX}}index.html">home</a>
+    <a href="{{ASSET_PREFIX}}blog.html">blog</a>
+    <a href="{{ASSET_PREFIX}}projects.html">projects</a>
+    <a href="{{ASSET_PREFIX}}notes.html">notes</a>
+    <a href="{{ASSET_PREFIX}}journal.html">journal</a>
+    <a href="{{ASSET_PREFIX}}poems.html">poems</a>
+  </nav>
 
 {{BODY}}
 
-  </div>
-  </main>
+  <footer class="site-footer">
+    <span>CC BY-NC-SA 4.0 · 2026 © yourname</span>
+    <span>built with <a href="https://pages.github.com">github pages</a></span>
+  </footer>
+
+</div>
 
 <script>
   (function () {
-    var themeBtn = document.getElementById("theme-toggle");
+    var btn = document.getElementById("theme-toggle");
     var root = document.documentElement;
 
-    function paintThemeBtn() {
-      var isDark = root.getAttribute("data-theme") === "dark";
-      themeBtn.textContent = isDark ? "●" : "○";
+    function paint() {
+      var dark = root.getAttribute("data-theme") === "dark";
+      btn.textContent = dark ? "●" : "○";
     }
 
-    paintThemeBtn();
+    paint();
 
-    themeBtn.addEventListener("click", function () {
+    btn.addEventListener("click", function () {
       var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       localStorage.setItem("theme", next);
-      paintThemeBtn();
-    });
-
-    var sidebarBtn = document.getElementById("sidebar-toggle");
-    var sidebar = document.getElementById("sidebar");
-
-    sidebarBtn.addEventListener("click", function () {
-      var isOpen = sidebar.classList.toggle("is-open");
-      sidebarBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      paint();
     });
   })();
 </script>
