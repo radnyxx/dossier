@@ -1,36 +1,40 @@
 ---
-title: yourname
+title: radnyx//rajasi
 description: personal site
 type: home
 ---
 
-hi, i'm **yourname** 👋
+hi, i'm rajasi // radnyx
 
-i like nixos, neovim and minimalism. i live in the cli, probably programming. mostly web but transitioning towards zig and gamedev.
+welcome to my digital dump.
 
-hacking around at [flora](#), open to new roles — mail at [name@example.com](#)
+inside: half-finished projects, late-night rabbit holes, and philosophical shit nobody asked for?!
+currently trying to learn cybersecurity without accidentally nuking my own environment in the process...
+feel free to poke around, just don't break anything (that's my job!)
 
-LINKROW resume|resume.pdf github|https://github.com/yourhandle x dot com|https://x.com/yourhandle
+open to new roles — mail at [maniloveforests@gmail.com](#)
+
+LINKROW github|https://github.com/radnyxx x dot com|https://x.com/_radnyx_
 
 ---
 
 ## some projects
 
-PROJECTCARD project one|(unfinished) card game in zig|placeholder.png|#
-PROJECTCARD project two|indie game studio, creating games with löve.|placeholder.png|#
+PROJECTCARD Phantom|cybersecurity-focused OSINT tool for intelligence gathering|placeholder.png|#
+PROJECTCARD LLM Execution Tracer|visualizer for tracking token execution and LLM logic|placeholder.png|#
 
-- [project three](#) — starter kit for cryptic hunts in golang
-- [project four](#) — wasm lightroom-esque editor in rust and nextjs
-- [project five](#) — ui library for widgets in löve2d
-- [project six](#) — semi-realistic planet simulator in odin
+- [pgp toolbox](https://github.com/radnyxx/pgp-toolbox) – encryption suite and key management utility
+- [metaforensic](https://github.com/radnyxx/metaforensic) – forensics and metadata analysis tool
+- [nirvanos](https://github.com/radnyxx/nirvanos) – this one's another personal webby... (unfinished)
+- [AETHER](https://github.com/radnyxx/AETHER) - something's cookin'
 
-you can find all of them [here](projects.html)
+you can find all of them [here](https://github.com/radnyxx?tab=repositories)
 
 ---
 
-## cool people
+## people ik
 
-AVATARROW https://github.com/friend1.png|# https://github.com/friend2.png|# https://github.com/friend3.png|# https://github.com/friend4.png|#
+AVATARROW https://github.com/AusterDev.png|# https://github.com/project-alkaid.png|# https://github.com/aayushpx.png|# https://github.com/drietech.png|#
 
 WEBRING uni webring: your.webring|# prev|# roll|# next|#
 WEBRING threadlocked: prev|# ring|# next|#
