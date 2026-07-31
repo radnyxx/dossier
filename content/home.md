@@ -8,7 +8,7 @@ hi, i'm rajasi // radnyx
 
 welcome to my digital dump.
 
-inside: half-finished projects, late-night rabbit holes, and philosophical shit nobody asked for?!
+inside: half-finished projects, miku-miku beam, and philosophical shit nobody asked for?!
 currently trying to learn cybersecurity without accidentally nuking my own environment in the process...
 feel free to poke around, just don't break anything (that's my job!)
 
@@ -32,7 +32,7 @@ you can find all of them [here](https://github.com/radnyxx?tab=repositories)
 
 ---
 
-## people ik
+## cool peeps
 
 AVATARROW https://github.com/AusterDev.png|# https://github.com/project-alkaid.png|# https://github.com/aayushpx.png|# https://github.com/drietech.png|#
 
