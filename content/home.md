@@ -36,5 +36,5 @@ you can find all of them [here](https://github.com/radnyxx?tab=repositories)
 
 AVATARROW https://github.com/AusterDev.png|# https://github.com/project-alkaid.png|# https://github.com/aayushpx.png|# https://github.com/drietech.png|#
 
-WEBRING uni webring: your.webring|# prev|# roll|# next|#
+WEBRING uni webring: radnyx//rajasi|# prev|# roll|# next|#
 WEBRING threadlocked: prev|# ring|# next|#
