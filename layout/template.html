@@ -16,6 +16,8 @@
 </head>
 <body>
 
+<canvas id="gol-bg" aria-hidden="true"></canvas>
+
 <div class="page">
 
   <header class="site-header">
@@ -62,6 +64,102 @@
       root.setAttribute("data-theme", next);
       localStorage.setItem("theme", next);
       paint();
+    });
+  })();
+</script>
+<script>
+  (function () {
+    var canvas = document.getElementById("gol-bg");
+    var ctx = canvas.getContext("2d");
+    var CELL = 14;               // px per cell
+    var STEP_MS = 220;           // ms between generations
+    var DENSITY = 0.16;          // initial fraction alive
+    var cols, rows, grid, dpr;
+    var lastStep = 0;
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function randomGrid(c, r) {
+      var g = new Uint8Array(c * r);
+      for (var i = 0; i < g.length; i++) g[i] = Math.random() < DENSITY ? 1 : 0;
+      return g;
+    }
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cols = Math.ceil(w / CELL);
+      rows = Math.ceil(h / CELL);
+      grid = randomGrid(cols, rows);
+    }
+
+    function idx(x, y) { return y * cols + x; }
+
+    function neighbors(g, x, y) {
+      var n = 0;
+      for (var dy = -1; dy <= 1; dy++) {
+        for (var dx = -1; dx <= 1; dx++) {
+          if (dx === 0 && dy === 0) continue;
+          var nx = (x + dx + cols) % cols;
+          var ny = (y + dy + rows) % rows;
+          n += g[idx(nx, ny)];
+        }
+      }
+      return n;
+    }
+
+    function step() {
+      var next = new Uint8Array(cols * rows);
+      var alive = 0;
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          var n = neighbors(grid, x, y);
+          var cell = grid[idx(x, y)];
+          var live = cell ? (n === 2 || n === 3) : (n === 3);
+          if (live) { next[idx(x, y)] = 1; alive++; }
+        }
+      }
+
+      if (alive < (cols * rows) * 0.01) next = randomGrid(cols, rows);
+      grid = next;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var style = getComputedStyle(document.documentElement);
+      ctx.fillStyle = style.getPropertyValue("--rule").trim() || "#2a2a2a";
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          if (grid[idx(x, y)]) ctx.fillRect(x * CELL, y * CELL, CELL - 2, CELL - 2);
+        }
+      }
+    }
+
+    function loop(ts) {
+      if (!reduceMotion) {
+        if (ts - lastStep > STEP_MS) {
+          step();
+          lastStep = ts;
+        }
+        requestAnimationFrame(loop);
+      }
+      draw();
+    }
+
+    resize();
+    draw();
+    if (!reduceMotion) requestAnimationFrame(loop);
+
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 200);
     });
   })();
 </script>
