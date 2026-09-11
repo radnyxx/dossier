@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
+  /* tokens */
 :root {
   --bg:          #121212;
   --bg-soft:     #1a1a1a;
@@ -30,7 +30,29 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* game-of-life background canvas — sits behind everything */
+#gol-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
 
+[data-theme="light"] #gol-bg {
+  opacity: 0.35;
+}
+
+/* content sits above the canvas; give it a body-color backdrop
+   so text stays readable over the animation */
+.page {
+  position: relative;
+  z-index: 1;
+}
+
+/* reset */
 *, *::before, *::after {
   box-sizing: border-box;
 }
