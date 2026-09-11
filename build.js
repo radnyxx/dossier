@@ -1,10 +1,4 @@
 #!/usr/bin/env node
-/**
- * build.js — zero-dependency static site builder
- * antfu.me-inspired single-column layout
- *
- * run: node build.js
- */
 
 const fs   = require("fs");
 const path = require("path");
@@ -15,15 +9,11 @@ const LAYOUT_FILE = path.join(ROOT, "layout", "template.html");
 const STYLE_FILE  = path.join(ROOT, "style.css");
 const DIST_DIR    = path.join(ROOT, "dist");
 
-// blog has sub-categories; the rest are flat
 const BLOG_SECTIONS  = ["devlogs", "talks", "tutorial"];
 const FLAT_SECTIONS  = ["journal", "notes", "poems"];
-// also check content/thinks if it exists (user renamed journal)
+
 const ALL_FLAT       = [...FLAT_SECTIONS, "thinks"];
 
-// -----------------------------------------------------------
-// frontmatter parser
-// -----------------------------------------------------------
 function parseFrontmatter(raw) {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!m) return { data: {}, body: raw };
@@ -36,9 +26,6 @@ function parseFrontmatter(raw) {
   return { data, body: m[2] };
 }
 
-// -----------------------------------------------------------
-// markdown → html
-// -----------------------------------------------------------
 function escHtml(s) {
   return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
@@ -64,7 +51,7 @@ function mdToHtml(md) {
   while (i < lines.length) {
     const line = lines[i];
 
-    // fenced code block
+
     if (line.trim().startsWith("```")) {
       closeList(); closeQuote();
       const code = [];
@@ -74,7 +61,7 @@ function mdToHtml(md) {
       i++; continue;
     }
 
-    // heading
+
     const hm = line.match(/^(#{1,3})\s+(.+)$/);
     if (hm) {
       closeList(); closeQuote();
@@ -82,13 +69,13 @@ function mdToHtml(md) {
       i++; continue;
     }
 
-    // hr
+
     if (/^---+$/.test(line.trim())) {
       closeList(); closeQuote();
       out.push("<hr>"); i++; continue;
     }
 
-    // blockquote
+
     if (line.trim().startsWith(">")) {
       closeList();
       if (!inQuote) { out.push("<blockquote>"); inQuote = true; }
@@ -97,21 +84,21 @@ function mdToHtml(md) {
       i++; continue;
     } else { closeQuote(); }
 
-    // list item
+
     if (/^\s*-\s+/.test(line)) {
       if (!inList) { out.push("<ul>"); inList = true; }
       out.push(`<li>${inline(line.replace(/^\s*-\s+/, ""))}</li>`);
       i++; continue;
     } else { closeList(); }
 
-    // blank
+
     if (!line.trim()) { i++; continue; }
 
-    // standalone image
+
     const im = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
     if (im) { out.push(`<img src="${im[2]}" alt="${im[1]}">`); i++; continue; }
 
-    // paragraph (preserve line breaks for poems)
+
     const para = [line]; i++;
     while (
       i < lines.length &&
@@ -129,10 +116,6 @@ function mdToHtml(md) {
   return out.join("\n\n");
 }
 
-// -----------------------------------------------------------
-// homepage custom blocks (LINKROW / PROJECTCARD / AVATARROW / WEBRING)
-// extracted before markdown processing to avoid html escaping
-// -----------------------------------------------------------
 function extractHomeBlocks(md) {
   const lines  = md.split("\n");
   const out    = [];
@@ -141,7 +124,7 @@ function extractHomeBlocks(md) {
 
   const token = (html) => { const t = `@@BLOCK_${blocks.length}@@`; blocks.push(html); return t; };
 
-  // splits "label|href" pairs where labels may contain spaces
+
   const pairs = (str) => {
     const re = /(\S(?:.*?\S)?)\|(\S+)(?=\s|$)/g;
     const r = []; let m;
@@ -192,9 +175,6 @@ function reinsert(html, blocks) {
   return o.replace(/@@BLOCK_(\d+)@@/g, (_, n) => blocks[+n]);
 }
 
-// -----------------------------------------------------------
-// inject into layout template
-// -----------------------------------------------------------
 function applyLayout({ title, description, assetPrefix, body }) {
   const layout = fs.readFileSync(LAYOUT_FILE, "utf8");
   return layout
@@ -204,9 +184,6 @@ function applyLayout({ title, description, assetPrefix, body }) {
     .replace(/{{BODY}}/g,         body);
 }
 
-// -----------------------------------------------------------
-// collect all posts for a section (returns array of objects)
-// -----------------------------------------------------------
 function collectPosts(section, subdir) {
   const dir = subdir
     ? path.join(CONTENT_DIR, section, subdir)
@@ -238,10 +215,6 @@ function collectPosts(section, subdir) {
     .sort((a, b) => (b.date > a.date ? 1 : -1));
 }
 
-// -----------------------------------------------------------
-// render a listing page (blog.html, notes.html, etc.)
-// grouped by year, antfu-style
-// -----------------------------------------------------------
 function renderListing({ title, posts, assetPrefix }) {
   const byYear = {};
   for (const p of posts) {
@@ -268,9 +241,6 @@ ${rows}
   return applyLayout({ title, description: "", assetPrefix, body });
 }
 
-// -----------------------------------------------------------
-// render a single post page
-// -----------------------------------------------------------
 function renderPost({ post, assetPrefix }) {
   const raw          = fs.readFileSync(post.srcPath, "utf8");
   const { data, body } = parseFrontmatter(raw);
@@ -300,9 +270,107 @@ ${htmlBody}
   });
 }
 
-// -----------------------------------------------------------
-// render homepage
-// -----------------------------------------------------------
+function collectFlatMeta(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter(f => f.endsWith(".md"))
+    .map(f => {
+      const raw = fs.readFileSync(path.join(dir, f), "utf8");
+      const { data, body } = parseFrontmatter(raw);
+      return { data, body, slug: path.basename(f, ".md") };
+    })
+    .sort((a, b) => (b.data.date || "") > (a.data.date || "") ? 1 : -1);
+}
+
+function renderProjects() {
+  const items = collectFlatMeta(path.join(CONTENT_DIR, "projects"));
+
+  const body_inner = items.length
+    ? `    <div class="project-grid project-grid-full">
+${items.map(p => {
+      const title = escHtml(p.data.title || p.slug);
+      const desc  = inline(p.data.description || "");
+      const link  = p.data.link || "#";
+      const thumb = p.data.image
+        ? `<div class="project-card-thumb"><img src="${p.data.image}" alt=""></div>`
+        : "";
+      return `<a href="${link}" class="project-card">
+  ${thumb}
+  <div class="project-card-title">${title}</div>
+  <div class="project-card-desc">${desc}</div>
+</a>`;
+    }).join("\n")}
+    </div>`
+    : `    <p class="fg-muted">nothing here yet.</p>`;
+
+  const body = `  <section class="posts-page">
+    <h1>projects</h1>
+${body_inner}
+  </section>`;
+
+  return applyLayout({ title: "projects", description: "all projects", assetPrefix: "", body });
+}
+
+function renderArt() {
+  const items = collectFlatMeta(path.join(CONTENT_DIR, "art"));
+  const categories = [...new Set(items.map(i => i.data.category).filter(Boolean))];
+
+  if (!items.length) {
+    const body = `  <section class="posts-page">
+    <h1>art</h1>
+    <p class="fg-muted">nothing here yet.</p>
+  </section>`;
+    return applyLayout({ title: "art", description: "art & moodboard", assetPrefix: "", body });
+  }
+
+  const filterBar = categories.length
+    ? `    <div class="art-filters">
+      <button type="button" class="art-filter-btn active" data-filter="all">all</button>
+${categories.map(c => `      <button type="button" class="art-filter-btn" data-filter="${escHtml(c)}">${escHtml(c)}</button>`).join("\n")}
+    </div>`
+    : "";
+
+  const tiles = items.map(i => {
+    const cat     = escHtml(i.data.category || "");
+    const caption = escHtml(i.data.title || "");
+    const desc    = i.data.description ? `<span class="art-desc">${inline(i.data.description)}</span>` : "";
+    const cap     = (caption || desc)
+      ? `<figcaption>${caption}${desc}</figcaption>`
+      : "";
+    return `      <figure class="art-item" data-category="${cat}">
+        <img src="${i.data.image}" alt="${caption}" loading="lazy">
+        ${cap}
+      </figure>`;
+  }).join("\n");
+
+  const body = `  <section class="posts-page">
+    <h1>art</h1>
+${filterBar}
+    <div class="art-masonry" id="art-masonry">
+${tiles}
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var btns  = document.querySelectorAll(".art-filter-btn");
+      var tiles = document.querySelectorAll(".art-item");
+      btns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          btns.forEach(function (b) { b.classList.remove("active"); });
+          btn.classList.add("active");
+          var f = btn.getAttribute("data-filter");
+          tiles.forEach(function (el) {
+            el.style.display = (f === "all" || el.getAttribute("data-category") === f) ? "" : "none";
+          });
+        });
+      });
+    })();
+  </script>`;
+
+  return applyLayout({ title: "art", description: "art & moodboard", assetPrefix: "", body });
+}
+
 function renderHome() {
   const raw            = fs.readFileSync(path.join(CONTENT_DIR, "home.md"), "utf8");
   const { data, body } = parseFrontmatter(raw);
@@ -322,9 +390,6 @@ ${bodyHtml}
   });
 }
 
-// -----------------------------------------------------------
-// helpers
-// -----------------------------------------------------------
 function ensureDir(d)  { fs.mkdirSync(d, { recursive: true }); }
 function clearDir(d)   { fs.rmSync(d, { recursive: true, force: true }); ensureDir(d); }
 function write(f, html) {
@@ -333,20 +398,17 @@ function write(f, html) {
   console.log("built ", path.relative(DIST_DIR, f));
 }
 
-// -----------------------------------------------------------
-// main
-// -----------------------------------------------------------
 function build() {
   clearDir(DIST_DIR);
 
-  // homepage
+
   write(path.join(DIST_DIR, "index.html"), renderHome());
 
-  // style
+
   fs.copyFileSync(STYLE_FILE, path.join(DIST_DIR, "style.css"));
   console.log("copied style.css");
 
-  // blog: collect all sub-sections, build listing + individual posts
+
   const allBlogPosts = [];
   for (const sub of BLOG_SECTIONS) {
     const posts = collectPosts("blog", sub);
@@ -358,13 +420,13 @@ function build() {
       );
     }
   }
-  // blog listing page
+
   write(
     path.join(DIST_DIR, "blog.html"),
     renderListing({ title: "blog", posts: allBlogPosts, assetPrefix: "" })
   );
 
-  // flat sections: journal, notes, poems (+ thinks alias)
+
   const flatToProcess = new Set();
   for (const s of ALL_FLAT) {
     const dir = path.join(CONTENT_DIR, s);
@@ -381,13 +443,17 @@ function build() {
         renderPost({ post, assetPrefix: "../" })
       );
     }
-    // listing page — use canonical name (thinks → journal visually)
+
     const listingName = section === "thinks" ? "journal" : section;
     write(
       path.join(DIST_DIR, `${listingName}.html`),
       renderListing({ title: listingName, posts, assetPrefix: "" })
     );
   }
+
+
+  write(path.join(DIST_DIR, "projects.html"), renderProjects());
+  write(path.join(DIST_DIR, "art.html"), renderArt());
 
   console.log("\nbuild complete →", DIST_DIR);
 }
