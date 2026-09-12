@@ -10,9 +10,7 @@ const STYLE_FILE  = path.join(ROOT, "style.css");
 const DIST_DIR    = path.join(ROOT, "dist");
 
 const BLOG_SECTIONS  = ["devlogs", "talks", "tutorial"];
-const FLAT_SECTIONS  = ["journal", "notes", "poems"];
-
-const ALL_FLAT       = [...FLAT_SECTIONS, "thinks"];
+const FLAT_SECTIONS  = ["thinks", "poems"];
 
 function parseFrontmatter(raw) {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
@@ -51,7 +49,7 @@ function mdToHtml(md) {
   while (i < lines.length) {
     const line = lines[i];
 
-
+    // fenced code block
     if (line.trim().startsWith("```")) {
       closeList(); closeQuote();
       const code = [];
@@ -61,7 +59,7 @@ function mdToHtml(md) {
       i++; continue;
     }
 
-
+    // heading
     const hm = line.match(/^(#{1,3})\s+(.+)$/);
     if (hm) {
       closeList(); closeQuote();
@@ -69,13 +67,13 @@ function mdToHtml(md) {
       i++; continue;
     }
 
-
+    // hr
     if (/^---+$/.test(line.trim())) {
       closeList(); closeQuote();
       out.push("<hr>"); i++; continue;
     }
 
-
+    // blockquote
     if (line.trim().startsWith(">")) {
       closeList();
       if (!inQuote) { out.push("<blockquote>"); inQuote = true; }
@@ -84,21 +82,21 @@ function mdToHtml(md) {
       i++; continue;
     } else { closeQuote(); }
 
-
+    // list item
     if (/^\s*-\s+/.test(line)) {
       if (!inList) { out.push("<ul>"); inList = true; }
       out.push(`<li>${inline(line.replace(/^\s*-\s+/, ""))}</li>`);
       i++; continue;
     } else { closeList(); }
 
-
+    // blank
     if (!line.trim()) { i++; continue; }
 
-
+    // standalone image
     const im = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
     if (im) { out.push(`<img src="${im[2]}" alt="${im[1]}">`); i++; continue; }
 
-
+    // paragraph (preserve line breaks for poems)
     const para = [line]; i++;
     while (
       i < lines.length &&
@@ -123,7 +121,6 @@ function extractHomeBlocks(md) {
   let cardBuf  = [];
 
   const token = (html) => { const t = `@@BLOCK_${blocks.length}@@`; blocks.push(html); return t; };
-
 
   const pairs = (str) => {
     const re = /(\S(?:.*?\S)?)\|(\S+)(?=\s|$)/g;
@@ -371,6 +368,48 @@ ${tiles}
   return applyLayout({ title: "art", description: "art & moodboard", assetPrefix: "", body });
 }
 
+function renderLinks() {
+  const items = collectFlatMeta(path.join(CONTENT_DIR, "links"));
+
+  if (!items.length) {
+    const body = `  <section class="posts-page">
+    <h1>links</h1>
+    <p class="fg-muted">nothing here yet.</p>
+  </section>`;
+    return applyLayout({ title: "links", description: "things i like", assetPrefix: "", body });
+  }
+
+  const grouped = {};
+  for (const i of items) {
+    const cat = i.data.category || "misc";
+    (grouped[cat] = grouped[cat] || []).push(i);
+  }
+  const cats = Object.keys(grouped).sort();
+
+  const sections = cats.map(cat => {
+    const rows = grouped[cat].map(i => {
+      const title = escHtml(i.data.title || i.slug);
+      const url   = i.data.url || "#";
+      let domain  = "";
+      try { domain = new URL(url).hostname.replace(/^www\./, ""); } catch (e) {}
+      const desc  = i.data.description ? `<span class="link-desc">${inline(i.data.description)}</span>` : "";
+      return `    <div class="link-item">
+      <a href="${url}" target="_blank" rel="noopener">${title}</a>${domain ? ` <span class="link-domain">${domain}</span>` : ""}
+      ${desc}
+    </div>`;
+    }).join("\n");
+    return `  <div class="posts-year">${escHtml(cat)}</div>\n${rows}`;
+  }).join("\n");
+
+  const body = `  <section class="posts-page">
+    <h1>links</h1>
+    <p class="fg-muted">things i like, in no particular order.</p>
+${sections}
+  </section>`;
+
+  return applyLayout({ title: "links", description: "things i like", assetPrefix: "", body });
+}
+
 function renderHome() {
   const raw            = fs.readFileSync(path.join(CONTENT_DIR, "home.md"), "utf8");
   const { data, body } = parseFrontmatter(raw);
@@ -401,13 +440,12 @@ function write(f, html) {
 function build() {
   clearDir(DIST_DIR);
 
-
+  // homepage
   write(path.join(DIST_DIR, "index.html"), renderHome());
 
-
+  // style
   fs.copyFileSync(STYLE_FILE, path.join(DIST_DIR, "style.css"));
   console.log("copied style.css");
-
 
   const allBlogPosts = [];
   for (const sub of BLOG_SECTIONS) {
@@ -426,9 +464,8 @@ function build() {
     renderListing({ title: "blog", posts: allBlogPosts, assetPrefix: "" })
   );
 
-
   const flatToProcess = new Set();
-  for (const s of ALL_FLAT) {
+  for (const s of FLAT_SECTIONS) {
     const dir = path.join(CONTENT_DIR, s);
     if (fs.existsSync(dir) && fs.readdirSync(dir).some(f => f.endsWith(".md"))) {
       flatToProcess.add(s);
@@ -443,14 +480,13 @@ function build() {
         renderPost({ post, assetPrefix: "../" })
       );
     }
-
-    const listingName = section === "thinks" ? "journal" : section;
     write(
-      path.join(DIST_DIR, `${listingName}.html`),
-      renderListing({ title: listingName, posts, assetPrefix: "" })
+      path.join(DIST_DIR, `${section}.html`),
+      renderListing({ title: section, posts, assetPrefix: "" })
     );
   }
 
+  write(path.join(DIST_DIR, "links.html"), renderLinks());
 
   write(path.join(DIST_DIR, "projects.html"), renderProjects());
   write(path.join(DIST_DIR, "art.html"), renderArt());
