@@ -6,11 +6,9 @@ type: home
 
 hi, i'm rajasi // radnyx
 
-welcome to my digital dump.
-
-inside: half-finished projects, miku-miku beam, and philosophical shit nobody asked for?!
-currently trying to learn cybersecurity without accidentally nuking my own environment in the process...
-feel free to poke around, just don't break anything (that's my job!)
+this is where i host my projects, personal notes, and whatever cybersecurity stuff i'm working through right now. 
+standard warning: most of it is unfinished
+expect 0x0 polish
 
 open to new roles — mail at [maniloveforests@gmail.com](#)
 
@@ -32,7 +30,7 @@ you can find all of them [here](https://github.com/radnyxx?tab=repositories)
 
 ---
 
-## cool peeps
+## known entities
 
 AVATARROW https://github.com/AusterDev.png|# https://github.com/project-alkaid.png|# https://github.com/aayushpx.png|# https://github.com/drietech.png|#
 
