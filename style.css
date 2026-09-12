@@ -413,7 +413,31 @@ a:hover {
   font-family: var(--font-mono);
 }
 
-/* post article page */
+/* links page */
+.link-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--rule);
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.link-item:last-child { border-bottom: none; }
+
+.link-item a { color: var(--fg); }
+.link-item a:hover { color: var(--accent); }
+
+.link-domain {
+  color: var(--fg-muted);
+  font-size: 0.82em;
+  font-family: var(--font-mono);
+}
+
+.link-desc {
+  display: block;
+  color: var(--fg-soft);
+  font-size: 0.88em;
+  margin-top: 0.15rem;
+}
 .post-header {
   margin-bottom: 2.5rem;
 }
