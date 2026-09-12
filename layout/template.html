@@ -33,8 +33,8 @@
     <a href="{{ASSET_PREFIX}}index.html">home</a>
     <a href="{{ASSET_PREFIX}}blog.html">blog</a>
     <a href="{{ASSET_PREFIX}}projects.html">projects</a>
-    <a href="{{ASSET_PREFIX}}notes.html">notes</a>
-    <a href="{{ASSET_PREFIX}}journal.html">journal</a>
+    <a href="{{ASSET_PREFIX}}thinks.html">thinks</a>
+    <a href="{{ASSET_PREFIX}}links.html">links</a>
     <a href="{{ASSET_PREFIX}}art.html">art</a>
   </nav>
 
@@ -125,7 +125,7 @@
           if (live) { next[idx(x, y)] = 1; alive++; }
         }
       }
-
+      // reseed if the board dies out or stabilizes too sparsely
       if (alive < (cols * rows) * 0.01) next = randomGrid(cols, rows);
       grid = next;
     }
